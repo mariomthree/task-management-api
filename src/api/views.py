@@ -30,7 +30,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         try:
             task = Task.objects.get(id=pk)
-            serializer = self.get_serializer(task, data=request.data, partial=True)
+            serializer = self.get_serializer(task, data=request.data)
             serializer.is_valid(raise_exception=True)
 
             serializer.save()
@@ -52,7 +52,28 @@ class TaskViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, pk=None):
-       pass
+        try:
+            task = Task.objects.get(id=pk)
+            serializer = self.get_serializer(task, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+
+            serializer.save()
+            return Response({
+                "code": "API_TASK_UPDATE_SUCCESS",
+                "message": "Task updated successfully",
+                "task": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({
+                "code": "API_TASK_NOT_FOUND",
+                "message": "Task does not exist."
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({
+                "code": "API_TASK_UPDATE_ERROR",
+                "message": "Failed to update task",
+                "errors": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
         try:
