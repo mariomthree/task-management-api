@@ -1,4 +1,5 @@
 # Task Management API
+<<<<<<< HEAD
 
 ## How to Start the Project
 
@@ -41,3 +42,5 @@ python3 manage.py runserver
 ```
 http://127.0.0.1:8000/api/docs
 ```
+=======
+>>>>>>> 70124673c842a990bf8aba7dbdf6857f88bcb676
